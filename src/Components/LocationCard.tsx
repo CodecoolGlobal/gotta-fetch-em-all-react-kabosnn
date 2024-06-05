@@ -8,10 +8,12 @@ type LocationCardProps = {
   onClick: () => void;
 };
 
-function LocationCard({ location, onClick }: LocationCardProps) {
+function LocationCard(props: LocationCardProps) {
+  const { location, onClick } = props;
+
   return (
-    <div onClick={onClick}>
-      <h2>{location.name}</h2>
+    <div onClick={onClick} style={{ cursor: 'pointer', margin: '10px', border: '1px solid black', padding: '10px' }}>
+      <h4>{location.name}</h4>
     </div>
   );
 }

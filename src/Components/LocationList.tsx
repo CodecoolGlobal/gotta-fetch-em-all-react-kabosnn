@@ -15,9 +15,11 @@ type Pokemon = {
 
 type LocationListProps = {
   onLocationSelect: (location: Location, pokemon: Pokemon) => void;
+  usersPokemonUrls: string[];
 };
 
-const LocationList: React.FC<LocationListProps> = ({ onLocationSelect }) => {
+function LocationList(props: LocationListProps) {
+  const { onLocationSelect, usersPokemonUrls } = props;
   const [locations, setLocations] = useState<Location[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
@@ -50,10 +52,7 @@ const LocationList: React.FC<LocationListProps> = ({ onLocationSelect }) => {
   return (
     <div>
       {selectedLocation && selectedPokemon ? (
-        <div>
-          <h2>{selectedLocation.name}</h2>
-          <PokemonCard pokemon={selectedPokemon} />
-        </div>
+        <PokemonCard pokemon={selectedPokemon} />
       ) : (
         <div>
           {locations.map((location) => (
@@ -67,6 +66,6 @@ const LocationList: React.FC<LocationListProps> = ({ onLocationSelect }) => {
       )}
     </div>
   );
-};
+}
 
 export default LocationList;

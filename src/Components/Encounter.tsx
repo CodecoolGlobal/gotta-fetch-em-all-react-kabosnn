@@ -9,7 +9,7 @@ type Pokemon = {
   sprite: string;
 };
 
-const usersPokemonUrls = [
+let initialUsersPokemonUrls = [
   "https://pokeapi.co/api/v2/pokemon/bulbasaur",
   "https://pokeapi.co/api/v2/pokemon/charizard",
   "https://pokeapi.co/api/v2/pokemon/poliwhirl"
@@ -18,14 +18,16 @@ const usersPokemonUrls = [
 type EncounterProps = {
   location: string;
   encounteredPokemon: any;
-  onEndEncounter: (newUsersPokemon: string[], message: string) => void;
+  onEndEncounter: (newUsersPokemonUrls: string[], message: string) => void;
 };
 
-const Encounter: React.FC<EncounterProps> = ({ location, encounteredPokemon, onEndEncounter }) => {
+function Encounter(props: EncounterProps) {
+  const { location, encounteredPokemon, onEndEncounter } = props;
   const [usersPokemon, setUsersPokemon] = useState<Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
-  const [message, setMessage] = useState<string>('');
-  const [battleStarted, setBattleStarted] = useState<boolean>(false);
+  const [encounteredPokemonState, setEncounteredPokemonState] = useState<any>(encounteredPokemon);
+  const [message, setMessage] = useState('');
+  const [battleStarted, setBattleStarted] = useState(false);
 
   useEffect(() => {
     const fetchPokemon = async (url: string) => {
@@ -42,7 +44,7 @@ const Encounter: React.FC<EncounterProps> = ({ location, encounteredPokemon, onE
     };
 
     const fetchAllUsersPokemon = async () => {
-      const promises = usersPokemonUrls.map(url => fetchPokemon(url));
+      const promises = initialUsersPokemonUrls.map(url => fetchPokemon(url));
       const results = await Promise.all(promises);
       setUsersPokemon(results);
     };
@@ -64,41 +66,41 @@ const Encounter: React.FC<EncounterProps> = ({ location, encounteredPokemon, onE
   };
 
   const handleAttack = () => {
-    if (!selectedPokemon || !encounteredPokemon) return;
-  
+    if (!selectedPokemon || !encounteredPokemonState) return;
+
     let userHP = selectedPokemon.hp;
-    let opponentHP = encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'hp').base_stat;
-  
-    const userDamage = calculateDamage(selectedPokemon.attack, encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'defense').base_stat);
+    let opponentHP = encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat;
+
+    const userDamage = calculateDamage(selectedPokemon.attack, encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'defense').base_stat);
     opponentHP -= userDamage;
-    setMessage(`${selectedPokemon.name} hits ${encounteredPokemon.name} for ${userDamage} damage!`);
-  
-    const opponentDamage = calculateDamage(encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'attack').base_stat, selectedPokemon.defense);
-    userHP -= opponentDamage;
-    setMessage(`${encounteredPokemon.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`);
-  
-    setSelectedPokemon({ ...selectedPokemon, hp: userHP });
-    setEncounteredPokemon({ ...encounteredPokemon, stats: [{ base_stat: opponentHP, stat: { name: 'hp' } }] });
-  
+
+    setMessage(`${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage!`);
+
     if (opponentHP <= 0) {
-      setMessage(`You captured ${encounteredPokemon.name}!`);
-      const newUsersPokemon = [...usersPokemon, encounteredPokemon];
-      onEndEncounter(newUsersPokemon, 'Victory! You captured the Pokémon.');
+      setMessage(`You captured ${encounteredPokemonState.name}!`);
+      const newUsersPokemonUrls = [...initialUsersPokemonUrls, encounteredPokemonState];
+      onEndEncounter(newUsersPokemonUrls, 'Victory! You captured the Pokémon.');
+      initialUsersPokemonUrls.push(`https://pokeapi.co/api/v2/pokemon/${encounteredPokemonState.name}`)
+      
       setBattleStarted(false);
+      
+      return;
     }
-  
+
+    const opponentDamage = calculateDamage(encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'attack').base_stat, selectedPokemon.defense);
+    userHP -= opponentDamage;
+    setMessage(`${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`);
+
+    setSelectedPokemon({ ...selectedPokemon, hp: userHP });
+    setEncounteredPokemonState({ ...encounteredPokemonState, stats: encounteredPokemonState.stats.map((stat: any) => stat.stat.name === 'hp' ? { ...stat, base_stat: opponentHP } : stat) });
+
     if (userHP <= 0) {
       setMessage(`${selectedPokemon.name} fainted!`);
-      const newUsersPokemon = usersPokemon.filter(pokemon => pokemon.url !== selectedPokemon.url);
-      onEndEncounter(newUsersPokemon.map(pokemon => pokemon.url), 'Defeat! You lost your Pokémon.');
+      const newUsersPokemonUrls = initialUsersPokemonUrls.filter(url => url !== selectedPokemon.url);
+      onEndEncounter(newUsersPokemonUrls, 'Defeat! You lost your Pokémon.');
       setBattleStarted(false);
     }
   };
-  
-  
-  
-  
-  
 
   const handleDefense = () => {
     // Handle defense logic if needed
@@ -110,18 +112,16 @@ const Encounter: React.FC<EncounterProps> = ({ location, encounteredPokemon, onE
     console.log(`Damage: ${damage}`);
     return damage;
   };
-  
-
 
   return (
     <div>
-      <h1>Encounter in {location}!</h1>
+      <h2>Encounter in {location}!</h2>
       {battleStarted ? (
         <>
           <div style={{ display: 'flex', justifyContent: 'space-around' }}>
             {selectedPokemon && (
               <div>
-                <h2>Your Pokémon</h2>
+                <h3>Your Pokémon</h3>
                 <img src={selectedPokemon.sprite} alt={selectedPokemon.name} />
                 <p>{selectedPokemon.name}</p>
                 <p>HP: {selectedPokemon.hp}</p>
@@ -129,25 +129,23 @@ const Encounter: React.FC<EncounterProps> = ({ location, encounteredPokemon, onE
                 <p>Defense: {selectedPokemon.defense}</p>
               </div>
             )}
-            {encounteredPokemon && (
+            {encounteredPokemonState && (
               <div>
-                <h2>Encountered Pokémon</h2>
-                <img src={encounteredPokemon.sprites.front_default} alt={encounteredPokemon.name} />
-                <p>{encounteredPokemon.name}</p>
-                <p>HP: {encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'hp').base_stat}</p>
-                <p>Attack: {encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'attack').base_stat}</p>
-                <p>Defense: {encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'defense').base_stat}</p>
+                <h3>Encountered Pokémon</h3>
+                <img src={encounteredPokemonState.sprites.front_default} alt={encounteredPokemonState.name} />
+                <p>{encounteredPokemonState.name}</p>
+                <p>HP: {encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat}</p>
+                <p>Attack: {encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'attack').base_stat}</p>
+                <p>Defense: {encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'defense').base_stat}</p>
               </div>
             )}
           </div>
-          <div>
-            <button onClick={handleAttack}>Attack</button>
-            <button onClick={handleDefense}>Defense</button>
-          </div>
+          <button onClick={handleAttack}>Attack</button>
+          <button onClick={handleDefense}>Defense</button>
         </>
       ) : (
         <>
-          <h2>Select Your Pokémon</h2>
+          <h3>Select Your Pokémon</h3>
           <div style={{ display: 'flex' }}>
             {usersPokemon.map(pokemon => (
               <div key={pokemon.name} onClick={() => selectPokemon(pokemon)} style={{ cursor: 'pointer', margin: '10px' }}>
@@ -162,6 +160,6 @@ const Encounter: React.FC<EncounterProps> = ({ location, encounteredPokemon, onE
       <p>{message}</p>
     </div>
   );
-};
+}
 
 export default Encounter;

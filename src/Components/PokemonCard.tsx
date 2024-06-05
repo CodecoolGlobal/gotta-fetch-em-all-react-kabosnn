@@ -3,15 +3,18 @@ import React from "react";
 type PokemonCardProps = {
   pokemon: {
     name: string;
+    url: string;
     sprites: { front_default: string };
   };
 };
 
-function PokemonCard({ pokemon }: PokemonCardProps) {
+function PokemonCard(props: PokemonCardProps) {
+  const { pokemon } = props;
+
   return (
-    <div>
+    <div style={{ border: '1px solid black', padding: '10px', margin: '10px' }}>
       <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-      <h2>{pokemon.name}</h2>
+      <h4>{pokemon.name}</h4>
     </div>
   );
 }
