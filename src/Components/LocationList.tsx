@@ -2,9 +2,25 @@ import React, { useState, useEffect } from "react";
 import LocationCard from "./LocationCard";
 import PokemonCard from "./PokemonCard";
 
-function LocationList() {
-  const [locations, setLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
+type Location = {
+  name: string;
+  url: string;
+};
+
+type Pokemon = {
+  name: string;
+  url: string;
+  sprites: { front_default: string };
+};
+
+type LocationListProps = {
+  onLocationSelect: (location: Location, pokemon: Pokemon) => void;
+};
+
+const LocationList: React.FC<LocationListProps> = ({ onLocationSelect }) => {
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -16,7 +32,7 @@ function LocationList() {
     fetchLocations();
   }, []);
 
-  const handleLocationClick = async (location) => {
+  const handleLocationClick = async (location: Location) => {
     setSelectedLocation(location);
 
     const areaUrl = location.url.replace("/location/", "/location-area/");
@@ -26,15 +42,17 @@ function LocationList() {
     const pokemonUrl = areaData.pokemon_encounters[rand].pokemon.url;
     const pokemonResponse = await fetch(pokemonUrl);
     const pokemonData = await pokemonResponse.json();
-    setSelectedLocation({ ...selectedLocation, pokemon: pokemonData });
+
+    setSelectedPokemon(pokemonData);
+    onLocationSelect(location, pokemonData);
   };
 
   return (
     <div>
-      {selectedLocation ? (
+      {selectedLocation && selectedPokemon ? (
         <div>
           <h2>{selectedLocation.name}</h2>
-          {selectedLocation.pokemon && <PokemonCard pokemon={selectedLocation.pokemon} />}
+          <PokemonCard pokemon={selectedPokemon} />
         </div>
       ) : (
         <div>
@@ -49,6 +67,6 @@ function LocationList() {
       )}
     </div>
   );
-}
+};
 
 export default LocationList;

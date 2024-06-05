@@ -3,7 +3,7 @@ import React from "react";
 type PokemonCardProps = {
   pokemon: {
     name: string;
-    url: string;
+    sprites: { front_default: string };
   };
 };
 
@@ -17,4 +17,3 @@ function PokemonCard({ pokemon }: PokemonCardProps) {
 }
 
 export default PokemonCard;
-
