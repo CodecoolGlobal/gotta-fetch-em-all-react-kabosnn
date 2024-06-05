@@ -27,6 +27,7 @@ function Encounter(props: EncounterProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [encounteredPokemonState, setEncounteredPokemonState] = useState<any>(encounteredPokemon);
   const [message, setMessage] = useState('');
+  const [messageTwo, setMessageTwo] = useState('');
   const [battleStarted, setBattleStarted] = useState(false);
 
   useEffect(() => {
@@ -75,6 +76,7 @@ function Encounter(props: EncounterProps) {
     opponentHP -= userDamage;
 
     setMessage(`${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage!`);
+    
 
     if (opponentHP <= 0) {
       setMessage(`You captured ${encounteredPokemonState.name}!`);
@@ -89,7 +91,7 @@ function Encounter(props: EncounterProps) {
 
     const opponentDamage = calculateDamage(encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'attack').base_stat, selectedPokemon.defense);
     userHP -= opponentDamage;
-    setMessage(`${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`);
+    setMessageTwo(`${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`);
 
     setSelectedPokemon({ ...selectedPokemon, hp: userHP });
     setEncounteredPokemonState({ ...encounteredPokemonState, stats: encounteredPokemonState.stats.map((stat: any) => stat.stat.name === 'hp' ? { ...stat, base_stat: opponentHP } : stat) });
@@ -110,7 +112,7 @@ function Encounter(props: EncounterProps) {
     const randomFactor = Math.floor(Math.random() * (255 - 217 + 1)) + 217;
     const damage = ((((2 / 5 + 2) * attack * 60 / defense) / 50) + 2) * randomFactor / 255;
     console.log(`Damage: ${damage}`);
-    return damage;
+    return Math.ceil(damage);
   };
 
   return (
@@ -158,6 +160,7 @@ function Encounter(props: EncounterProps) {
         </>
       )}
       <p>{message}</p>
+      <p>{messageTwo}</p>
     </div>
   );
 }
