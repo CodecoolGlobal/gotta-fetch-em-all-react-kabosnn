@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import LocationCard from "./LocationCard";
+import PokemonCard from "./PokemonCard";
 
-export default function LocationsList() {
-  const [locations, setLocations] = useState<Location[]>([]);
+function LocationList() {
+  const [locations, setLocations] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -14,13 +16,39 @@ export default function LocationsList() {
     fetchLocations();
   }, []);
 
+  const handleLocationClick = async (location) => {
+    setSelectedLocation(location);
+
+    const areaUrl = location.url.replace("/location/", "/location-area/");
+    const areaResponse = await fetch(areaUrl);
+    const areaData = await areaResponse.json();
+    const rand = Math.floor(Math.random() * areaData.pokemon_encounters.length);
+    const pokemonUrl = areaData.pokemon_encounters[rand].pokemon.url;
+    const pokemonResponse = await fetch(pokemonUrl);
+    const pokemonData = await pokemonResponse.json();
+    setSelectedLocation({ ...selectedLocation, pokemon: pokemonData });
+  };
+
   return (
     <div>
-      {locations.map((location) => (
-        <LocationCard key={location.url} location={location} />
-      ))}
+      {selectedLocation ? (
+        <div>
+          <h2>{selectedLocation.name}</h2>
+          {selectedLocation.pokemon && <PokemonCard pokemon={selectedLocation.pokemon} />}
+        </div>
+      ) : (
+        <div>
+          {locations.map((location) => (
+            <LocationCard
+              key={location.url}
+              location={location}
+              onClick={() => handleLocationClick(location)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-
+export default LocationList;
