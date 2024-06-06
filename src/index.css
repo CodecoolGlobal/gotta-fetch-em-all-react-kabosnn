@@ -1,4 +1,3 @@
-
 body {
   font-family: Arial, sans-serif;
   background-color: #f0f8ff;
@@ -53,7 +52,6 @@ button:hover {
   background-color: #0056b3;
 }
 
-/* Health bar styles */
 .health-bar {
   position: relative;
   width: 100%;
@@ -84,7 +82,6 @@ button:hover {
   font-weight: bold;
 }
 
-/* Keyframes for animations */
 @keyframes decreaseHealth {
   from {
     width: 100%;
@@ -118,7 +115,6 @@ button:hover {
   }
 }
 
-/* Classes for applying animations */
 .attack {
   animation: attack 0.5s ease;
 }

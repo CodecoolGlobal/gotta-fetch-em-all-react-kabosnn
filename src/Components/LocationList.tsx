@@ -21,7 +21,9 @@ type LocationListProps = {
 export default function LocationList(props: LocationListProps) {
   const { onLocationSelect, usersPokemonUrls } = props;
   const [locations, setLocations] = useState<Location[]>([]);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
 
   useEffect(() => {
@@ -67,4 +69,3 @@ export default function LocationList(props: LocationListProps) {
     </div>
   );
 }
-
