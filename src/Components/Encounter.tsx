@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import HealthBar from './Healthbar';
+import '../index.css'
 
+// Type definition for Pokémon
 type Pokemon = {
   name: string;
   url: string;
@@ -15,22 +18,24 @@ let initialUsersPokemonUrls = [
   "https://pokeapi.co/api/v2/pokemon/poliwhirl"
 ];
 
+// Type definition for encounter props
 type EncounterProps = {
   location: string;
   encounteredPokemon: any;
   onEndEncounter: (newUsersPokemonUrls: string[], message: string) => void;
 };
 
-export default function Encounter(props: EncounterProps) {
-  const { location, encounteredPokemon, onEndEncounter } = props;
+
+
+// Encounter component
+function Encounter({ location, encounteredPokemon, onEndEncounter }: EncounterProps) {
   const [usersPokemon, setUsersPokemon] = useState<Pokemon[]>([]);
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [encounteredPokemonState, setEncounteredPokemonState] = useState<any>(encounteredPokemon);
   const [message, setMessage] = useState('');
-  const [messageTwo, setMessageTwo] = useState('')
   const [battleStarted, setBattleStarted] = useState(false);
-
-  
+  const [userAnimation, setUserAnimation] = useState('');
+  const [opponentAnimation, setOpponentAnimation] = useState('');
 
   useEffect(() => {
     const fetchPokemon = async (url: string) => {
@@ -71,43 +76,49 @@ export default function Encounter(props: EncounterProps) {
   const handleAttack = () => {
     if (!selectedPokemon || !encounteredPokemonState) return;
 
+    setUserAnimation('attack');
+    setOpponentAnimation('hit');
 
-
-
-    let userHP = selectedPokemon.hp;
-    let opponentHP = encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat;
-
+    // Calculate and update HP for both Pokémon
     const userDamage = calculateDamage(selectedPokemon.attack, encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'defense').base_stat);
-    opponentHP -= userDamage;
+    const opponentDamage = calculateDamage(encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'attack').base_stat, selectedPokemon.defense);
 
-    setMessageTwo(`${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage!`);
+    const newOpponentHP = encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat - userDamage;
+    const newUserHP = selectedPokemon.hp - opponentDamage;
 
-    if (opponentHP <= 0) {
+    setMessage(`${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage! ${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`);
+
+    if (newOpponentHP <= 0) {
       setMessage(`You captured ${encounteredPokemonState.name}!`);
       const newUsersPokemonUrls = [...initialUsersPokemonUrls, encounteredPokemonState.url];
       onEndEncounter(newUsersPokemonUrls, 'Victory! You captured the Pokémon.');
-      initialUsersPokemonUrls.push(`https://pokeapi.co/api/v2/pokemon/${encounteredPokemonState.name}`)
+      initialUsersPokemonUrls.push(`https://pokeapi.co/api/v2/pokemon/${encounteredPokemonState.name}`);
       setBattleStarted(false);
       return;
     }
 
-    const opponentDamage = calculateDamage(encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'attack').base_stat, selectedPokemon.defense);
-    userHP -= opponentDamage;
-    setMessage(`${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`);
-
-    setSelectedPokemon({ ...selectedPokemon, hp: userHP });
-    setEncounteredPokemonState({ ...encounteredPokemonState, stats: encounteredPokemonState.stats.map((stat: any) => stat.stat.name === 'hp' ? { ...stat, base_stat: opponentHP } : stat) });
-
-    if (userHP <= 0) {
+    if (newUserHP <= 0) {
       setMessage(`${selectedPokemon.name} fainted!`);
       const newUsersPokemonUrls = initialUsersPokemonUrls.filter(url => url !== selectedPokemon.url);
       onEndEncounter(newUsersPokemonUrls, 'Defeat! You lost your Pokémon.');
-      initialUsersPokemonUrls.filter((url) => url !=`https://pokeapi.co/api/v2/pokemon/${selectedPokemon.name}/`);
+      initialUsersPokemonUrls = initialUsersPokemonUrls.filter(url => url !== `https://pokeapi.co/api/v2/pokemon/${selectedPokemon.name}`);
       setBattleStarted(false);
+      return;
     }
+
+    // Update HP states
+    setSelectedPokemon({ ...selectedPokemon, hp: newUserHP });
+    setEncounteredPokemonState({ ...encounteredPokemonState, stats: encounteredPokemonState.stats.map((stat: any) => stat.stat.name === 'hp' ? { ...stat, base_stat: newOpponentHP } : stat) });
+
+    // Reset animations
+    setTimeout(() => {
+      setUserAnimation('');
+      setOpponentAnimation('');
+    }, 500);
   };
 
   const handleDefense = () => {
+    // Handle defense logic if needed
   };
 
   const calculateDamage = (attack: number, defense: number) => {
@@ -117,54 +128,6 @@ export default function Encounter(props: EncounterProps) {
     return Math.ceil(damage);
   };
 
-  const HealthBar = ({ maxHp = 100, hp = 100 } = {}) => {
-    const barWidth = (hp / maxHp) * 100;
-
-    return (
-      <div>
-        <div class="health-bar">
-          <div class="bar" style={{ width: `${barWidth}%` }}></div>
-          <div class="hit" style={{ width: `${0}%` }}></div>
-  
-          <div
-            style={{
-              position: "absolute",
-              top: "5px",
-              left: 0,
-              right: 0,
-              textAlign: "center"
-            }}
-          >
-            {hp} / {maxHp}
-          </div>
-        </div>
-  
-        <br />
-      </div>
-    );
-  };
-  
-  const ControlledHealthBar = () => {
-    const maxHp = 100;
-    const [hp, setHp] = useState(maxHp);
-    return (
-      <div>
-        <HealthBar hp={pokemonHp} maxHp={pokemonHp} />
-        <button
-          class="damage random"
-          onClick={() => {
-            var damage = Math.floor(Math.random() * maxHp);
-            setHp(Math.max(0, hp - damage));
-          }}
-        >
-          hit random
-        </button>
-  
-       
-      </div>
-    );
-  };
-
   return (
     <div>
       <h2>Encounter in {location}!</h2>
@@ -172,8 +135,8 @@ export default function Encounter(props: EncounterProps) {
         {selectedPokemon && (
           <div>
             <h3>Your Pokémon</h3>
-            <img src={selectedPokemon.sprite} alt={selectedPokemon.name}/>
-            <ControlledHealthBar hp={selectedPokemon.hp} maxHp={selectedPokemon.hp}/>
+            <img className={userAnimation} src={selectedPokemon.sprite} alt={selectedPokemon.name} />
+            <HealthBar hp={selectedPokemon.hp} maxHp={usersPokemon.find(p => p.name === selectedPokemon.name)?.hp || 100} />
             <p>{selectedPokemon.name}</p>
             <p>HP: {selectedPokemon.hp}</p>
             <p>Attack: {selectedPokemon.attack}</p>
@@ -183,7 +146,8 @@ export default function Encounter(props: EncounterProps) {
         {encounteredPokemonState && (
           <div>
             <h3>Encountered Pokémon</h3>
-            <img src={encounteredPokemonState.sprites.front_default} alt={encounteredPokemonState.name} />
+            <img className={opponentAnimation} src={encounteredPokemonState.sprites.front_default} alt={encounteredPokemonState.name} />
+            <HealthBar hp={encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat} maxHp={encounteredPokemon.stats.find((stat: any) => stat.stat.name === 'hp').base_stat} />
             <p>{encounteredPokemonState.name}</p>
             <p>HP: {encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat}</p>
             <p>Attack: {encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'attack').base_stat}</p>
@@ -211,10 +175,8 @@ export default function Encounter(props: EncounterProps) {
         </>
       )}
       <p>{message}</p>
-      <p>{messageTwo}</p>
     </div>
   );
 }
 
-
-
+export default Encounter;
