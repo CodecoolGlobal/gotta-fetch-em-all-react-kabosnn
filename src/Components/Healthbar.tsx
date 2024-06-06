@@ -25,6 +25,7 @@ export default function HealthBar({
           top: "0",
           left: "50%",
           transform: "translateX(-50%)",
+          textSizeAdjust: "auto",
         }}
       >
         {hp} / {maxHp}

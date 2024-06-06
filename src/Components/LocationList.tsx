@@ -56,7 +56,8 @@ export default function LocationList(props: LocationListProps) {
       {selectedLocation && selectedPokemon ? (
         <PokemonCard pokemon={selectedPokemon} />
       ) : (
-        <div className="location-card">
+        <div className="table-container">
+        <div className="location-table">
           {locations.map((location) => (
             <LocationCard
               key={location.url}
@@ -64,6 +65,7 @@ export default function LocationList(props: LocationListProps) {
               onClick={() => handleLocationClick(location)}
             />
           ))}
+        </div>
         </div>
       )}
     </div>

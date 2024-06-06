@@ -101,7 +101,10 @@ function Encounter({
     const newUserHP = selectedPokemon.hp - opponentDamage;
 
     setMessage(
-      `${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage! ${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`
+      `${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage!`
+    );
+    setMessageTwo(
+      `${encounteredPokemonState.name} hits ${selectedPokemon.name} for ${opponentDamage} damage!`
     );
 
     if (newOpponentHP <= 0) {
@@ -119,7 +122,6 @@ function Encounter({
     }
 
     if (newUserHP <= 0) {
-      setMessage(`${selectedPokemon.name} fainted!`);
       const newUsersPokemonUrls = initialUsersPokemonUrls.filter(
         (url) => url !== selectedPokemon.url
       );
@@ -250,10 +252,11 @@ function Encounter({
               </div>
             ))}
           </div>
-          <button onClick={startBattle}>Start Battle</button>
+          <button className="start-button" onClick={startBattle}>Start Battle</button>
         </>
       )}
-      <p>{message}</p>
+      <p className="damage-mesage">{message}</p>
+      <p className="damage-mesage">{messageTwo}</p>
     </div>
   );
 }

@@ -38,9 +38,9 @@ function App() {
 
  
 
-
-      <h1>POKÉMON</h1>
-      <img className="pika" src="https://i.pinimg.com/originals/8a/4a/72/8a4a7213b43f4ec4f99db406be655f9e.gif" alt="pikapika" />
+      <div className="logo-container">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/1280px-International_Pok%C3%A9mon_logo.svg.png" className="logo"/>
+      </div>
       {battleMessage && <p>{battleMessage}</p>}
       {selectedLocation && encounteredPokemon ? (
         <Encounter
