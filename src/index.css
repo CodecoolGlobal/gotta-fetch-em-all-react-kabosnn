@@ -1,9 +1,19 @@
+@font-face {
+  font-family: "Poke-font";
+  src: url(./Fonts/PokemonGb-RAeo.ttf) format(truetype);
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Poke-font", sans-serif;
   background-color: #f0f8ff;
   color: #333;
   margin: 0;
   padding: 0;
+  image-rendering: pixelated;
+}
+
+button {
+  font-family: "Poke-font", sans-serif; 
 }
 
 h2 {
@@ -30,7 +40,7 @@ h2 {
   padding: 20px;
   margin: 10px;
   background-color: #fff;
-  width : 120px
+  width : 14rem
 }
 
 .pokemon-container img {
@@ -122,4 +132,45 @@ button:hover {
 
 .hit {
   animation: hit 0.5s ease;
+}
+
+.location-card {
+  text-align: center;
+  width: 10rem;
+  display: grid;
+  grid-template-columns:  1fr 1fr 1fr 1fr;
+  grid-gap: 2rem;
+  justify-content:flex-start;
+}
+
+.location {
+  border-image: url("./Images/frame.png") 7 round;
+  border-width: 0.5rem;
+}
+
+.pika {
+  max-width: 7rem;
+  max-height: 7rem;
+}
+
+h1, .pika {
+  display: inline-flex;
+  position: center;
+}
+
+.location:hover {
+  transform: scale(1.1);
+}
+
+.select-pokemon-container {
+  image-rendering: pixelated;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  background-color: #fff;
+  width : 10rem;
+  cursor: pointer;
+
 }

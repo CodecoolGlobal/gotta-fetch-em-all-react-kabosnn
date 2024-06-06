@@ -12,7 +12,7 @@ export default function LocationCard(props: LocationCardProps) {
   const { location, onClick } = props;
 
   return (
-    <div
+    <div className="location"
       onClick={onClick}
       style={{
         cursor: "pointer",

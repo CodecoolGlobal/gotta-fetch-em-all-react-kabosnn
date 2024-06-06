@@ -34,16 +34,25 @@ function App() {
 
   return (
     <React.StrictMode>
+      
+
+ 
+
+
       <h1>POKÉMON</h1>
+      <img className="pika" src="https://i.pinimg.com/originals/8a/4a/72/8a4a7213b43f4ec4f99db406be655f9e.gif" alt="pikapika" />
       {battleMessage && <p>{battleMessage}</p>}
       {selectedLocation && encounteredPokemon ? (
         <Encounter
-          location={selectedLocation.name}
+          location={selectedLocation.name.split("-")
+          .map((s) => s[0].toUpperCase() + s.slice(1))
+          .join(" ")}
           encounteredPokemon={encounteredPokemon}
           onEndEncounter={handleEndEncounter}
         />
       ) : (
-        <LocationList onLocationSelect={handleLocationSelect} />
+      <LocationList onLocationSelect={handleLocationSelect} />
+
       )}
     </React.StrictMode>
   );

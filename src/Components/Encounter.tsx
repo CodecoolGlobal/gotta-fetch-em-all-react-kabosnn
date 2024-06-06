@@ -33,6 +33,7 @@ function Encounter({
   const [encounteredPokemonState, setEncounteredPokemonState] =
     useState<any>(encounteredPokemon);
   const [message, setMessage] = useState("");
+  const [messageTwo, setMessageTwo] = useState("");
   const [battleStarted, setBattleStarted] = useState(false);
   const [userAnimation, setUserAnimation] = useState("");
   const [opponentAnimation, setOpponentAnimation] = useState("");
@@ -240,7 +241,7 @@ function Encounter({
           <div className="flex-container">
             {usersPokemon.map((pokemon) => (
               <div
-              className="pokemon-container"
+              className="select-pokemon-container"
                 key={pokemon.name}
                 onClick={() => selectPokemon(pokemon)}
               >
