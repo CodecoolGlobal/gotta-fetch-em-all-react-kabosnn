@@ -13,7 +13,7 @@ function LocationCard(props: LocationCardProps) {
 
   return (
     <div onClick={onClick} style={{ cursor: 'pointer', margin: '10px', border: '1px solid black', padding: '10px' }}>
-      <h4>{location.name}</h4>
+      <h4>{location.name.split("-").map((s) => s[0].toUpperCase() + s.slice(1)).join(" ")}</h4>
     </div>
   );
 }
