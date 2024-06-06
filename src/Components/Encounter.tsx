@@ -27,6 +27,7 @@ export default function Encounter(props: EncounterProps) {
   const [selectedPokemon, setSelectedPokemon] = useState<Pokemon | null>(null);
   const [encounteredPokemonState, setEncounteredPokemonState] = useState<any>(encounteredPokemon);
   const [message, setMessage] = useState('');
+  const [messageTwo, setMessageTwo] = useState('')
   const [battleStarted, setBattleStarted] = useState(false);
 
   useEffect(() => {
@@ -74,12 +75,13 @@ export default function Encounter(props: EncounterProps) {
     const userDamage = calculateDamage(selectedPokemon.attack, encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'defense').base_stat);
     opponentHP -= userDamage;
 
-    setMessage(`${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage!`);
+    setMessageTwo(`${selectedPokemon.name} hits ${encounteredPokemonState.name} for ${userDamage} damage!`);
 
     if (opponentHP <= 0) {
       setMessage(`You captured ${encounteredPokemonState.name}!`);
       const newUsersPokemonUrls = [...initialUsersPokemonUrls, encounteredPokemonState.url];
       onEndEncounter(newUsersPokemonUrls, 'Victory! You captured the Pokémon.');
+      initialUsersPokemonUrls.push(`https://pokeapi.co/api/v2/pokemon/${encounteredPokemonState.name}`)
       setBattleStarted(false);
       return;
     }
@@ -95,12 +97,12 @@ export default function Encounter(props: EncounterProps) {
       setMessage(`${selectedPokemon.name} fainted!`);
       const newUsersPokemonUrls = initialUsersPokemonUrls.filter(url => url !== selectedPokemon.url);
       onEndEncounter(newUsersPokemonUrls, 'Defeat! You lost your Pokémon.');
+      initialUsersPokemonUrls.filter((url) => url !=`https://pokeapi.co/api/v2/pokemon/${selectedPokemon.name}/`);
       setBattleStarted(false);
     }
   };
 
   const handleDefense = () => {
-    // Handle defense logic if needed
   };
 
   const calculateDamage = (attack: number, defense: number) => {
@@ -155,6 +157,7 @@ export default function Encounter(props: EncounterProps) {
         </>
       )}
       <p>{message}</p>
+      <p>{messageTwo}</p>
     </div>
   );
 }
