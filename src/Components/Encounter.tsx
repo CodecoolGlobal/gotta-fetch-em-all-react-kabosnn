@@ -160,7 +160,7 @@ function Encounter({
       <h2>Encounter in {location}!</h2>
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         {selectedPokemon && (
-          <div>
+          <div className="pokemon-container">
             <h3>Your Pokémon</h3>
             <img
               className={userAnimation}
@@ -181,7 +181,8 @@ function Encounter({
           </div>
         )}
         {encounteredPokemonState && (
-          <div>
+          <div className="pokemon-container">
+            
             <h3>Encountered Pokémon</h3>
             <img
               className={opponentAnimation}
@@ -236,12 +237,12 @@ function Encounter({
       ) : (
         <>
           <h3>Select Your Pokémon</h3>
-          <div style={{ display: "flex" }}>
+          <div className="flex-container">
             {usersPokemon.map((pokemon) => (
               <div
+              className="pokemon-container"
                 key={pokemon.name}
                 onClick={() => selectPokemon(pokemon)}
-                style={{ cursor: "pointer", margin: "10px" }}
               >
                 <img src={pokemon.sprite} alt={pokemon.name} />
                 <p>{pokemon.name}</p>

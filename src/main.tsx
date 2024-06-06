@@ -4,7 +4,7 @@ import "./index.css";
 import LocationList from "./Components/LocationList";
 import Encounter from "./Components/Encounter";
 
-const App: React.FC = () => {
+function App() {
   const [selectedLocation, setSelectedLocation] = useState<any | null>(null);
   const [encounteredPokemon, setEncounteredPokemon] = useState<any | null>(
     null
@@ -47,6 +47,6 @@ const App: React.FC = () => {
       )}
     </React.StrictMode>
   );
-};
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(<App />);
