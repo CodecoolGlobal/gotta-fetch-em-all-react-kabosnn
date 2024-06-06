@@ -8,7 +8,7 @@ type PokemonCardProps = {
   };
 };
 
-function PokemonCard(props: PokemonCardProps) {
+export default function PokemonCard(props: PokemonCardProps) {
   const { pokemon } = props;
 
   return (
@@ -19,4 +19,3 @@ function PokemonCard(props: PokemonCardProps) {
   );
 }
 
-export default PokemonCard;

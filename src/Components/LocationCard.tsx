@@ -8,7 +8,7 @@ type LocationCardProps = {
   onClick: () => void;
 };
 
-function LocationCard(props: LocationCardProps) {
+export default function LocationCard(props: LocationCardProps) {
   const { location, onClick } = props;
 
   return (
@@ -18,4 +18,3 @@ function LocationCard(props: LocationCardProps) {
   );
 }
 
-export default LocationCard;
