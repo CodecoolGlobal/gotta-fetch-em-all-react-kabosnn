@@ -30,6 +30,8 @@ export default function Encounter(props: EncounterProps) {
   const [messageTwo, setMessageTwo] = useState('')
   const [battleStarted, setBattleStarted] = useState(false);
 
+  
+
   useEffect(() => {
     const fetchPokemon = async (url: string) => {
       const response = await fetch(url);
@@ -68,6 +70,9 @@ export default function Encounter(props: EncounterProps) {
 
   const handleAttack = () => {
     if (!selectedPokemon || !encounteredPokemonState) return;
+
+
+
 
     let userHP = selectedPokemon.hp;
     let opponentHP = encounteredPokemonState.stats.find((stat: any) => stat.stat.name === 'hp').base_stat;
@@ -112,6 +117,54 @@ export default function Encounter(props: EncounterProps) {
     return Math.ceil(damage);
   };
 
+  const HealthBar = ({ maxHp = 100, hp = 100 } = {}) => {
+    const barWidth = (hp / maxHp) * 100;
+
+    return (
+      <div>
+        <div class="health-bar">
+          <div class="bar" style={{ width: `${barWidth}%` }}></div>
+          <div class="hit" style={{ width: `${0}%` }}></div>
+  
+          <div
+            style={{
+              position: "absolute",
+              top: "5px",
+              left: 0,
+              right: 0,
+              textAlign: "center"
+            }}
+          >
+            {hp} / {maxHp}
+          </div>
+        </div>
+  
+        <br />
+      </div>
+    );
+  };
+  
+  const ControlledHealthBar = () => {
+    const maxHp = 100;
+    const [hp, setHp] = useState(maxHp);
+    return (
+      <div>
+        <HealthBar hp={pokemonHp} maxHp={pokemonHp} />
+        <button
+          class="damage random"
+          onClick={() => {
+            var damage = Math.floor(Math.random() * maxHp);
+            setHp(Math.max(0, hp - damage));
+          }}
+        >
+          hit random
+        </button>
+  
+       
+      </div>
+    );
+  };
+
   return (
     <div>
       <h2>Encounter in {location}!</h2>
@@ -120,6 +173,7 @@ export default function Encounter(props: EncounterProps) {
           <div>
             <h3>Your Pokémon</h3>
             <img src={selectedPokemon.sprite} alt={selectedPokemon.name}/>
+            <ControlledHealthBar hp={selectedPokemon.hp} maxHp={selectedPokemon.hp}/>
             <p>{selectedPokemon.name}</p>
             <p>HP: {selectedPokemon.hp}</p>
             <p>Attack: {selectedPokemon.attack}</p>
