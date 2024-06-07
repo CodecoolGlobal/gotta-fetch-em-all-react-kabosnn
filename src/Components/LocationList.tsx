@@ -52,22 +52,23 @@ export default function LocationList(props: LocationListProps) {
   };
 
   return (
-    <div>
-      {selectedLocation && selectedPokemon ? (
-        <PokemonCard pokemon={selectedPokemon} />
-      ) : (
-        <div className="table-container">
-        <div className="location-table">
-          {locations.map((location) => (
-            <LocationCard
-              key={location.url}
-              location={location}
-              onClick={() => handleLocationClick(location)}
-            />
-          ))}
-        </div>
-        </div>
-      )}
-    </div>
+    <><div className="logo-container">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/1280px-International_Pok%C3%A9mon_logo.svg.png" className="logo" />
+      </div><div>
+              {selectedLocation && selectedPokemon ? (
+                  <PokemonCard pokemon={selectedPokemon} />
+              ) : (
+                  <div className="table-container">
+                      <div className="location-table">
+                          {locations.map((location) => (
+                              <LocationCard
+                                  key={location.url}
+                                  location={location}
+                                  onClick={() => handleLocationClick(location)} />
+                          ))}
+                      </div>
+                  </div>
+              )}
+          </div></>
   );
 }

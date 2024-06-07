@@ -9,10 +9,3 @@ export function getLocations() {
 
   return apiGet<Location[]>(URL);
 }
-
-//   export function getLocationDetails(serialNumber: string) {
-//     const URL =
-//       "https://jvvkjy8utk.execute-api.eu-central-1.amazonaws.com/tourist/api/countries/by-cca3";
-
-//     return apiGet<LocationDetail>(`${URL}/${serialNumber}`);
-//   }

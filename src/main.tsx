@@ -9,11 +9,7 @@ function App() {
   const [encounteredPokemon, setEncounteredPokemon] = useState<any | null>(
     null
   );
-  const [usersPokemonUrls, setUsersPokemonUrls] = useState<string[]>([
-    "https://pokeapi.co/api/v2/pokemon/bulbasaur",
-    "https://pokeapi.co/api/v2/pokemon/charizard",
-    "https://pokeapi.co/api/v2/pokemon/poliwhirl",
-  ]);
+
   const [battleMessage, setBattleMessage] = useState<string>("");
 
   const handleLocationSelect = (location: any, pokemon: any) => {
@@ -26,7 +22,6 @@ function App() {
     newUsersPokemonUrls: string[],
     message: string
   ) => {
-    setUsersPokemonUrls(newUsersPokemonUrls);
     setSelectedLocation(null);
     setEncounteredPokemon(null);
     setBattleMessage(message);
@@ -34,13 +29,6 @@ function App() {
 
   return (
     <React.StrictMode>
-      
-
- 
-
-      <div className="logo-container">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/International_Pok%C3%A9mon_logo.svg/1280px-International_Pok%C3%A9mon_logo.svg.png" className="logo"/>
-      </div>
       {battleMessage && <p>{battleMessage}</p>}
       {selectedLocation && encounteredPokemon ? (
         <Encounter

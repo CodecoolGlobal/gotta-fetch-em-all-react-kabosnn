@@ -23,7 +23,7 @@ type EncounterProps = {
   onEndEncounter: (newUsersPokemonUrls: string[], message: string) => void;
 };
 
-function Encounter({
+export default function Encounter({
   location,
   encounteredPokemon,
   onEndEncounter,
@@ -161,7 +161,7 @@ function Encounter({
   return (
     <div>
       <h2>Encounter in {location}!</h2>
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
+      <div className="battle-ground">
         {selectedPokemon && (
           <div className="pokemon-container">
             <h3>Your Pokémon</h3>
@@ -261,4 +261,4 @@ function Encounter({
   );
 }
 
-export default Encounter;
+

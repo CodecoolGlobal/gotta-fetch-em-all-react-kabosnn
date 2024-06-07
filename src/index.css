@@ -12,6 +12,7 @@ body {
   margin: 0;
   padding: 0;
   image-rendering: pixelated;
+  text-size-adjust: smaller;  
 }
 
 button {
@@ -39,23 +40,24 @@ h2 {
   text-align: center;
   border: 1px solid #ccc;
   border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
+  padding: 1rem;
+  margin: 0.5rem;
   background-color: #fff;
   width : 14rem;
 }
 
-.pokemon-container img {
+.pokemon-container > img {
   max-width: 150px;
   transition: transform 0.5s ease;
 }
 
 button {
+  display: block;
+  margin: 20px auto;
   padding: 10px 20px;
-  margin: 20px 10px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #858c93;
   color: #fff;
   cursor: pointer;
   font-size: 16px;
@@ -200,6 +202,15 @@ h1, .pika {
  
   overflow: hidden;
 }
+
+.battle-ground{
+  display: flex;
+ justify-content: space-around;
+}
+
+
+
+
 
 
 
