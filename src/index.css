@@ -7,6 +7,7 @@
 
 body {
   font-family: "Poke-font", sans-serif;
+  font-size: medium;
   background-color: #f0f8ff;
   color: #333;
   margin: 0;
@@ -208,8 +209,10 @@ h1, .pika {
  justify-content: space-around;
 }
 
-
-
+.selection {
+  display: flex;
+  justify-content: center;
+}
 
 
 

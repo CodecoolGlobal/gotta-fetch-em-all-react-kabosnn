@@ -151,7 +151,7 @@ export default function Encounter({
   const handleDefense = () => {};
 
   const calculateDamage = (attack: number, defense: number) => {
-    const randomFactor = Math.floor(Math.random() * (255 - 217 + 1)) + 217;
+    const randomFactor = Math.floor(Math.random() * (255 - 217)) + 217;
     const damage =
       ((((2 / 5 + 2) * attack * 60) / defense / 50 + 2) * randomFactor) / 255;
     console.log(`Damage: ${damage}`);
@@ -178,7 +178,6 @@ export default function Encounter({
               }
             />
             <p>{selectedPokemon.name}</p>
-            <p>HP: {selectedPokemon.hp}</p>
             <p>Attack: {selectedPokemon.attack}</p>
             <p>Defense: {selectedPokemon.defense}</p>
           </div>
@@ -206,14 +205,6 @@ export default function Encounter({
             />
             <p>{encounteredPokemonState.name}</p>
             <p>
-              HP:{" "}
-              {
-                encounteredPokemonState.stats.find(
-                  (stat: any) => stat.stat.name === "hp"
-                ).base_stat
-              }
-            </p>
-            <p>
               Attack:{" "}
               {
                 encounteredPokemonState.stats.find(
@@ -239,7 +230,7 @@ export default function Encounter({
         </>
       ) : (
         <>
-          <h3>Select Your Pokémon</h3>
+          <h3 className="selection">Select Your Pokémon</h3>
           <div className="flex-container">
             {usersPokemon.map((pokemon) => (
               <div
