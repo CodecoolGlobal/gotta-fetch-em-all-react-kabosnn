@@ -15,6 +15,8 @@ let initialUsersPokemonUrls = [
   "https://pokeapi.co/api/v2/pokemon/bulbasaur",
   "https://pokeapi.co/api/v2/pokemon/charizard",
   "https://pokeapi.co/api/v2/pokemon/poliwhirl",
+  "https://pokeapi.co/api/v2/pokemon/rayquaza",
+  "https://pokeapi.co/api/v2/pokemon/dragonite"
 ];
 
 type EncounterProps = {
@@ -44,7 +46,7 @@ export default function Encounter({
       const data = await response.json();
       return {
         name: data.name,
-        url,
+        url: `https://pokeapi.co/api/v2/pokemon/${data.name}`,
         hp: data.stats.find((stat: any) => stat.stat.name === "hp").base_stat,
         attack: data.stats.find((stat: any) => stat.stat.name === "attack")
           .base_stat,

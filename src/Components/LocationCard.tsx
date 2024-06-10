@@ -14,13 +14,8 @@ export default function LocationCard(props: LocationCardProps) {
   return (
     <div className="location"
       onClick={onClick}
-      style={{
-        cursor: "pointer",
-        margin: "10px",
-        border: "1px solid black",
-        padding: "10px",
-      }}
     >
+
       <h4>
         {location.name
           .split("-")
