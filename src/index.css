@@ -7,7 +7,7 @@
 
 body {
   font-family: "Poke-font", sans-serif;
-  font-size: medium;
+  font-size: small;
   background-color: #f0f8ff;
   color: #333;
   margin: 0;
@@ -44,7 +44,7 @@ h2 {
   padding: 1rem;
   margin: 0.5rem;
   background-color: #fff;
-  width : 14rem;
+  width : 16rem;
 }
 
 .pokemon-container > img {
@@ -159,6 +159,10 @@ button:hover {
 .location {
   border-image: url("./Images/frame.png") 7 round;
   border-width: 0.5rem;
+  cursor: "pointer";
+  margin: 0.5rem;
+  border: 1px solid black;
+  padding: 1rem;
 }
 
 .pika {
@@ -189,7 +193,7 @@ h1, .pika {
 }
 .logo-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   height: 15rem;
   width: 100vw;
