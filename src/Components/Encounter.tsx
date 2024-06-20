@@ -15,7 +15,6 @@ let initialUsersPokemonUrls = [
   "https://pokeapi.co/api/v2/pokemon/bulbasaur",
   "https://pokeapi.co/api/v2/pokemon/charizard",
   "https://pokeapi.co/api/v2/pokemon/poliwhirl",
-  "https://pokeapi.co/api/v2/pokemon/rayquaza",
   "https://pokeapi.co/api/v2/pokemon/dragonite"
 ];
 

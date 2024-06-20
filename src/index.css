@@ -145,6 +145,7 @@ button:hover {
   align-items: center;
   height: 150vh; 
   width: 50vw; 
+  padding-top:8rem
 }
 
 .location-table {
@@ -197,8 +198,13 @@ h1, .pika {
   align-items: center;
   height: 15rem;
   width: 100vw;
-  position: relative;
+ /* Fixed position to always stay at the top */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure the logo container is on top */
+  background-color: #f0f8ff; /* Background color to cover content behind */
 }
+
 
 .logo {
   max-height: 10rem;
@@ -218,6 +224,17 @@ h1, .pika {
   justify-content: center;
 }
 
+.img-container {
+  width: 8rem;
+  height: 6rem;
+  overflow: hidden;
+}
+
+.location-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 
 
